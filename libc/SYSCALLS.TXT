@@ -171,7 +171,7 @@ int           __timer_gettime:timer_gettime(timer_t, struct itimerspec*)        
 int           __timer_getoverrun:timer_getoverrun(timer_t)                                              260,262
 int           __timer_delete:timer_delete(timer_t)                                                      261,263
 int           utimes(const char*, const struct timeval tvp[2])                          269, 271
-
+int           adjtimex(struct timex *)    124
 # signals
 int     sigaction(int, const struct sigaction *, struct sigaction *)  -1,67,67
 int     sigprocmask(int, const sigset_t *, sigset_t *)  126
@@ -245,6 +245,12 @@ int     init_module(void *, unsigned long, const char *)  128
 int     delete_module(const char*, unsigned int)   129
 int     klogctl:syslog(int, char *, int)   103
 
+#  09-08-15
+#   o Add system calls needed by udev daemon
+#
+int     readlinkat(int, const char *, char *, size_t)  332,305
+int 	signalfd(int, const sigset_t *, int) 349,321
+
 # futex
 int	futex(void *, int, int, void *, void *, int) 240
 
@@ -264,3 +270,10 @@ int     __set_tls:ARM_set_tls(void*)                                 983045,-1
 int     cacheflush:ARM_cacheflush(long start, long end, long flags)  983042,-1
 
 int     eventfd(int count, int flags) 351,323
+
+# busybox: 2010-01-17
+int	stime(time_t *)	25
+int	swapon(const char *, int)	87
+int	swapoff(const char *)	115
+int	sysinfo(struct sysinfo *)	116
+pid_t	getsid(pid_t pid)	147

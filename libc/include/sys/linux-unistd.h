@@ -214,6 +214,8 @@ int              stime (time_t *);
 int              swapon (const char *, int);
 int              swapoff (const char *);
 pid_t            getsid (pid_t pid);
+int              ioperm (unsigned long, unsigned long, int);
+int              iopl (int);
 #ifdef __cplusplus
 }
 #endif

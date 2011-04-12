@@ -171,3 +171,5 @@ syscall_src += arch-sh/syscalls/stime.S
 syscall_src += arch-sh/syscalls/swapon.S
 syscall_src += arch-sh/syscalls/swapoff.S
 syscall_src += arch-sh/syscalls/getsid.S
+syscall_src += arch-sh/syscalls/ioperm.S
+syscall_src += arch-sh/syscalls/iopl.S

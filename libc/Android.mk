@@ -507,6 +507,8 @@ ifeq ($(TARGET_ARCH),arm)
   ifeq ($(ARCH_ARM_HAVE_TLS_REGISTER),true)
     libc_common_cflags += -DHAVE_ARM_TLS_REGISTER
   endif
+  # See nvbug 789056
+  libc_common_cflags += -DNV_USE_NEON_MEMCPY=0
 else # !arm
   libc_crt_target_cflags :=
 endif # !arm

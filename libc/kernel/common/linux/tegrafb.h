@@ -52,7 +52,6 @@ struct tegra_fb_windowattr {
  __u32 buff_id;
  __u32 flags;
  __u32 blend;
- __u32 layout;
  __u32 offset;
  __u32 offset_u;
  __u32 offset_v;

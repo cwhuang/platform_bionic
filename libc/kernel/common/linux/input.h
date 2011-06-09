@@ -24,7 +24,7 @@ struct input_event {
  __s32 value;
 };
 
-#define EV_VERSION 0x010000
+#define EV_VERSION 0x010001
 
 struct input_id {
  __u16 bustype;
@@ -39,18 +39,31 @@ struct input_absinfo {
  __s32 maximum;
  __s32 fuzz;
  __s32 flat;
+ __s32 resolution;
 };
+
+struct input_keymap_entry {
+ __u8  flags;
+ __u8  len;
+ __u16 index;
+ __u32 keycode;
+ __u8  scancode[32];
+};
+
 
 #define EVIOCGVERSION _IOR('E', 0x01, int)  
 #define EVIOCGID _IOR('E', 0x02, struct input_id)  
-#define EVIOCGREP _IOR('E', 0x03, int[2])  
-#define EVIOCSREP _IOW('E', 0x03, int[2])  
-#define EVIOCGKEYCODE _IOR('E', 0x04, int[2])  
-#define EVIOCSKEYCODE _IOW('E', 0x04, int[2])  
+#define EVIOCGREP _IOR('E', 0x03, unsigned int[2])
+#define EVIOCSREP _IOW('E', 0x03, unsigned int[2])
+#define EVIOCGKEYCODE _IOR('E', 0x04, unsigned int[2])
+#define EVIOCGKEYCODE_V2 _IOR('E', 0x04, struct input_keymap_entry)
+#define EVIOCSKEYCODE _IOW('E', 0x04, unsigned int[2])
+#define EVIOCSKEYCODE_V2 _IOW('E', 0x04, struct input_keymap_entry)
 
 #define EVIOCGNAME(len) _IOC(_IOC_READ, 'E', 0x06, len)  
 #define EVIOCGPHYS(len) _IOC(_IOC_READ, 'E', 0x07, len)  
 #define EVIOCGUNIQ(len) _IOC(_IOC_READ, 'E', 0x08, len)  
+#define EVIOCGPROP(len) _IOC(_IOC_READ, 'E', 0x09, len)
 
 #define EVIOCGKEY(len) _IOC(_IOC_READ, 'E', 0x18, len)  
 #define EVIOCGLED(len) _IOC(_IOC_READ, 'E', 0x19, len)  
@@ -204,6 +217,7 @@ struct input_absinfo {
 #define KEY_KPEQUAL 117
 #define KEY_KPPLUSMINUS 118
 #define KEY_PAUSE 119
+#define KEY_SCALE 120
 
 #define KEY_KPCOMMA 121
 #define KEY_HANGEUL 122
@@ -239,6 +253,7 @@ struct input_absinfo {
 #define KEY_WWW 150
 #define KEY_MSDOS 151
 #define KEY_COFFEE 152
+#define KEY_SCREENLOCK KEY_COFFEE
 #define KEY_DIRECTION 153
 #define KEY_CYCLEWINDOWS 154
 #define KEY_MAIL 155
@@ -333,7 +348,20 @@ struct input_absinfo {
 
 #define KEY_BATTERY 236
 
+#define KEY_BLUETOOTH 237
+#define KEY_WLAN 238
+#define KEY_UWB 239
+
 #define KEY_UNKNOWN 240
+
+#define KEY_VIDEO_NEXT 241
+#define KEY_VIDEO_PREV 242
+#define KEY_BRIGHTNESS_CYCLE 243
+#define KEY_BRIGHTNESS_ZERO 244
+#define KEY_DISPLAY_OFF 245
+
+#define KEY_WIMAX 246
+#define KEY_RFKILL 247
 
 #define BTN_MISC 0x100
 #define BTN_0 0x100
@@ -403,6 +431,7 @@ struct input_absinfo {
 #define BTN_STYLUS2 0x14c
 #define BTN_TOOL_DOUBLETAP 0x14d
 #define BTN_TOOL_TRIPLETAP 0x14e
+#define BTN_TOOL_QUADTAP 0x14f
 
 #define BTN_WHEEL 0x150
 #define BTN_GEAR_DOWN 0x150
@@ -472,6 +501,34 @@ struct input_absinfo {
 #define KEY_DIGITS 0x19d
 #define KEY_TEEN 0x19e
 #define KEY_TWEN 0x19f
+#define KEY_VIDEOPHONE 0x1a0
+#define KEY_GAMES 0x1a1
+#define KEY_ZOOMIN 0x1a2
+#define KEY_ZOOMOUT 0x1a3
+#define KEY_ZOOMRESET 0x1a4
+#define KEY_WORDPROCESSOR 0x1a5
+#define KEY_EDITOR 0x1a6
+#define KEY_SPREADSHEET 0x1a7
+#define KEY_GRAPHICSEDITOR 0x1a8
+#define KEY_PRESENTATION 0x1a9
+#define KEY_DATABASE 0x1aa
+#define KEY_NEWS 0x1ab
+#define KEY_VOICEMAIL 0x1ac
+#define KEY_ADDRESSBOOK 0x1ad
+#define KEY_MESSENGER 0x1ae
+#define KEY_DISPLAYTOGGLE 0x1af
+#define KEY_SPELLCHECK 0x1b0
+#define KEY_LOGOFF 0x1b1
+
+#define KEY_DOLLAR 0x1b2
+#define KEY_EURO 0x1b3
+
+#define KEY_FRAMEBACK 0x1b4
+#define KEY_FRAMEFORWARD 0x1b5
+#define KEY_CONTEXT_MENU 0x1b6
+#define KEY_MEDIA_REPEAT 0x1b7
+#define KEY_10CHANNELSUP 0x1b8
+#define KEY_10CHANNELSDOWN 0x1b9
 
 #define KEY_DEL_EOL 0x1c0
 #define KEY_DEL_EOS 0x1c1
@@ -508,6 +565,8 @@ struct input_absinfo {
 #define KEY_BRL_DOT6 0x1f6
 #define KEY_BRL_DOT7 0x1f7
 #define KEY_BRL_DOT8 0x1f8
+#define KEY_BRL_DOT9 0x1f9
+#define KEY_BRL_DOT10 0x1fa
 
 #define KEY_MIN_INTERESTING KEY_MUTE
 #define KEY_MAX 0x1ff

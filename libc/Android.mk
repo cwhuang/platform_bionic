@@ -480,7 +480,8 @@ libc_common_cflags := \
 		-DINET6 \
 		-I$(LOCAL_PATH)/private \
 		-DUSE_DL_PREFIX \
-		-DPOSIX_MISTAKE
+		-DPOSIX_MISTAKE \
+                -DLOG_ON_HEAP_ERROR \
 
 # these macro definitions are required to implement the
 # 'timezone' and 'daylight' global variables, as well as
@@ -507,6 +508,8 @@ ifeq ($(TARGET_ARCH),arm)
   ifeq ($(ARCH_ARM_HAVE_TLS_REGISTER),true)
     libc_common_cflags += -DHAVE_ARM_TLS_REGISTER
   endif
+  # See nvbug 789056
+  libc_common_cflags += -DNV_USE_NEON_MEMCPY=0
 else # !arm
   libc_crt_target_cflags :=
 endif # !arm
@@ -522,6 +525,10 @@ endif
 # crtbegin_xxx.S and crtend_xxx.S
 #
 libc_crt_target_cflags += -I$(LOCAL_PATH)/private
+
+ifeq ($(TARGET_ARCH),arm)
+libc_crt_target_cflags += -DCRT_LEGACY_WORKAROUND
+endif
 
 # Define some common includes
 # ========================================================
@@ -554,7 +561,7 @@ ifneq ($(filter arm x86,$(TARGET_ARCH)),)
 GEN := $(TARGET_OUT_STATIC_LIBRARIES)/crtbegin_so.o
 $(GEN): $(LOCAL_PATH)/arch-$(TARGET_ARCH)/bionic/crtbegin_so.S
 	@mkdir -p $(dir $@)
-	$(TARGET_CC) $(libc_crt_target_cflags) -o $@ -c $<
+	$(TARGET_CC) $(libc_crt_target_cflags) -fPIC -o $@ -c $<
 ALL_GENERATED_SOURCES += $(GEN)
 
 GEN := $(TARGET_OUT_STATIC_LIBRARIES)/crtend_so.o
@@ -598,6 +605,9 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := $(libc_common_src_files)
 LOCAL_CFLAGS := $(libc_common_cflags)
+ifeq ($(TARGET_ARCH),arm)
+LOCAL_CFLAGS += -DCRT_LEGACY_WORKAROUND
+endif
 LOCAL_C_INCLUDES := $(libc_common_c_includes)
 LOCAL_MODULE := libc_common
 LOCAL_SYSTEM_SHARED_LIBRARIES :=

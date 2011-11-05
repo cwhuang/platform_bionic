@@ -29,7 +29,7 @@
 #include <machine/cpu-features.h>
 #include <machine/asm.h>
 
-#if defined(__ARM_NEON__)
+#if defined(__ARM_NEON__) && (NV_USE_NEON_MEMCPY == 1)
 
         .text
         .fpu    neon
